@@ -62,7 +62,7 @@ module Paranoia
     ActiveRecord::Base.transaction do
       run_callbacks(:restore) do
         update_column paranoia_column, nil
-        restore_associated_records if opts[:recursive]
+        restore_associated_records unless opts[:recursive] == false
       end
     end
   end
@@ -100,17 +100,27 @@ module Paranoia
     end
 
     destroyed_associations.each do |association|
-      association_data = send(association.name)
-
-      unless association_data.nil?
-        if association_data.paranoid?
-          if association.collection?
-            association_data.only_deleted.each { |record| record.restore(:recursive => true) }
-          else
-            association_data.restore(:recursive => true)
-          end
-        end
+      # association_data = send(association.name)
+      #
+      # unless association_data.nil?
+      #   if association_data.paranoid?
+      #     if association.collection?
+      #       association_data.only_deleted.each { |record| record.restore(:recursive => true) }
+      #     else
+      #       association_data.restore(:recursive => true)
+      #     end
+      #   end
+      # end
+      entity = association.class_name.constantize
+      find_expression = nil
+      ass_fk = association.foreign_key
+      if association.polymorphic?
+        association_polymorphic_type = association.type
+        find_expression = {association_polymorphic_type => self.class.name.to_s, ass_fk => self.id}
+      else
+        find_expression = {ass_fk => self.id}
       end
+      entity.only_deleted.where(find_expression).each {|item| item.restore(:recursive => true)}
     end
   end
 end
