@@ -4,7 +4,21 @@ module Paranoia
   def self.included(klazz)
     klazz.extend Query
     klazz.extend Callbacks
+
   end
+
+  # def self.__derive_fitler_expression(association, context)
+  #   is_polymorphic = !association.options[:as].blank?
+  #   if is_polymorphic
+  #     t = association.type
+  #     fk = association.foreign_key
+  #
+  #     {t => context.class.name.to_s, fk => context.id}
+  #   else
+  #     {fk => context.id}
+  #   end
+  #
+  # end
 
   module Query
     def paranoid?
@@ -92,6 +106,8 @@ module Paranoia
     end
   end
 
+
+
   # restore associated records that have been soft deleted when
   # we called #destroy
   def restore_associated_records
@@ -111,16 +127,30 @@ module Paranoia
       #     end
       #   end
       # end
-      entity = association.class_name.constantize
+      entity = association.klass.to_s.constantize
       find_expression = nil
       ass_fk = association.foreign_key
-      if association.polymorphic?
+
+      # First check if it is a polymorphic association
+      if !association.options[:as].blank?
         association_polymorphic_type = association.type
         find_expression = {association_polymorphic_type => self.class.name.to_s, ass_fk => self.id}
       else
         find_expression = {ass_fk => self.id}
       end
-      entity.only_deleted.where(find_expression).each {|item| item.restore(:recursive => true)}
+      if association.collection?
+        entity.only_deleted.where(find_expression).each {|record| restore_child(record)}
+      else
+        item = entity.only_deleted.where(find_expression).first
+        restore_child(item) unless item.nil?
+      end
+
+    end
+  end
+
+  def restore_child(entity)
+    if entity.respond_to?('paranoid?')
+      entity.restore(:recursive => true)
     end
   end
 end
