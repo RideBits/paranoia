@@ -121,7 +121,7 @@ module Paranoia
 
     destroyed_associations.each do |association|
       entity = association.klass
-      find_expression = Paranoid.__derive_fitler_expression(association, self)
+      find_expression = Paranoia.__derive_fitler_expression(association, self)
       puts "restore_associated_records query:", find_expression.inspect
       if association.collection?
         entity.only_deleted.where(find_expression).each {|record| restore_child(record)}
