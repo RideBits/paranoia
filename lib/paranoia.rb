@@ -7,13 +7,17 @@ module Paranoia
 
   end
 
+  # Given an association derive appropriate where clause to find the targets
   def self.__derive_fitler_expression(association, context)
-    pk = association.primary_key_column
+    pk = association.primary_key_column.name.to_sym
     fk = association.foreign_key
+
+    # If it is a belongs to association then context should have the foreign_key
 
     if association.belongs_to?
       {pk => context.send(fk)}
     else
+        # Else use the type if it is polymorphic and target has the foreign_key
         is_polymorphic = !association.options[:as].blank?
         if is_polymorphic
           t = association.type
@@ -21,6 +25,16 @@ module Paranoia
         else
           {fk => context.id}
         end
+    end
+  end
+
+  # Check that the model belongs_to to association and foreign_key is set
+  def self.__is_associated?(association, context)
+    if association.belongs_to?
+      fk = association.foreign_key
+      !context.send(fk).nil?
+    else
+      true
     end
   end
 
@@ -119,10 +133,12 @@ module Paranoia
       association.options[:dependent] == :destroy
     end
 
+    ___selfishness = self
+
     destroyed_associations.each do |association|
+      next unless Paranoia.__is_associated?(association, ___selfishness)
       entity = association.klass
-      find_expression = Paranoia.__derive_fitler_expression(association, self)
-      puts "restore_associated_records query:", find_expression.inspect
+      find_expression = Paranoia.__derive_fitler_expression(association, ___selfishness)
       if association.collection?
         entity.only_deleted.where(find_expression).each {|record| restore_child(record)}
       else
