@@ -91,6 +91,7 @@ module Paranoia
   end
 
   def restore!(opts = {})
+    __instance = self
     ActiveRecord::Base.transaction do
       run_callbacks(:restore) do
         update_column paranoia_column, nil
@@ -140,7 +141,7 @@ module Paranoia
       entity = association.klass
       find_expression = Paranoia.__derive_fitler_expression(association, ___selfishness)
       if association.collection?
-        entity.only_deleted.where(find_expression).each {|record| restore_child(record)}
+        item = entity.only_deleted.where(find_expression).each {|record| restore_child(record)}
       else
         item = entity.only_deleted.where(find_expression).first
         restore_child(item) unless item.nil?
@@ -151,6 +152,7 @@ module Paranoia
 
   def restore_child(entity)
     if entity.respond_to?('paranoid?')
+
       entity.restore(:recursive => true)
     end
   end
@@ -166,12 +168,21 @@ class ActiveRecord::Base
       dependent_reflections = self.reflections.select do |name, reflection|
         reflection.options[:dependent] == :destroy
       end
+      ___selfishness = self
       if dependent_reflections.any?
-        dependent_reflections.each do |name, _|
-          associated_records = self.send(name)
-          # Paranoid models will have this method, non-paranoid models will not
-          associated_records = associated_records.with_deleted if associated_records.respond_to?(:with_deleted)
-          associated_records.each(&:really_destroy!)
+        dependent_reflections.each do |name, association|
+          if association.collection?
+            associated_records = self.send(name)
+            # Paranoid models will have this method, non-paranoid models will not
+            associated_records = associated_records.with_deleted if associated_records.respond_to?(:with_deleted)
+            associated_records.each(&:really_destroy!)
+          else
+            next unless Paranoia.__is_associated?(association, ___selfishness)
+            entity = association.klass
+            find_expression = Paranoia.__derive_fitler_expression(association, ___selfishness)
+            item = entity.with_deleted.where(find_expression).first
+            item.really_destroy! unless item.nil?
+          end
         end
       end
       destroy!

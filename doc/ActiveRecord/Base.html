@@ -259,22 +259,6 @@
       <pre class="lines">
 
 
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
 176
 177
 178
@@ -291,10 +275,30 @@
 189
 190
 191
-192</pre>
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 160</span>
+      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 176</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_acts_as_paranoid'>acts_as_paranoid</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='op'>=</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>alias</span> <span class='symbol'>:really_destroyed?</span> <span class='symbol'>:destroyed?</span>
@@ -306,11 +310,15 @@
       <span class='id identifier rubyid_reflection'>reflection</span><span class='period'>.</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:dependent</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='symbol'>:destroy</span>
     <span class='kw'>end</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
-      <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid__'>_</span><span class='op'>|</span>
-        <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-        <span class='comment'># Paranoid models will have this method, non-paranoid models will not
-</span>        <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_with_deleted'>with_deleted</span> <span class='kw'>if</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:with_deleted</span><span class='rparen'>)</span>
-        <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:really_destroy!</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_association'>association</span><span class='op'>|</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_association'>association</span><span class='period'>.</span><span class='id identifier rubyid_collection?'>collection?</span>
+          <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+          <span class='comment'># Paranoid models will have this method, non-paranoid models will not
+</span>          <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_with_deleted'>with_deleted</span> <span class='kw'>if</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:with_deleted</span><span class='rparen'>)</span>
+          <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:really_destroy!</span><span class='rparen'>)</span>
+        <span class='kw'>else</span>
+
+        <span class='kw'>end</span>
       <span class='kw'>end</span>
     <span class='kw'>end</span>
     <span class='id identifier rubyid_destroy!'>destroy!</span>
@@ -371,12 +379,12 @@
       <pre class="lines">
 
 
-194
-195
-196</pre>
+214
+215
+216</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 194</span>
+      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 214</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_paranoid?'>paranoid?</span>
   <span class='kw'>false</span>
@@ -429,12 +437,12 @@
       <pre class="lines">
 
 
-198
-199
-200</pre>
+218
+219
+220</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 198</span>
+      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 218</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_paranoid?'>paranoid?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_paranoid?'>paranoid?</span>
@@ -485,12 +493,12 @@ not if it is “destroyed”.</p>
       <pre class="lines">
 
 
-205
-206
-207</pre>
+225
+226
+227</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 205</span>
+      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 225</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_persisted?'>persisted?</span>
   <span class='id identifier rubyid_paranoid?'>paranoid?</span> <span class='op'>?</span> <span class='op'>!</span><span class='id identifier rubyid_new_record?'>new_record?</span> <span class='op'>:</span> <span class='kw'>super</span>
@@ -515,34 +523,42 @@ not if it is “destroyed”.</p>
       <pre class="lines">
 
 
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178</pre>
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 165</span>
+      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 181</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_really_destroy!'>really_destroy!</span>
   <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_reflections'>reflections</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_reflection'>reflection</span><span class='op'>|</span>
     <span class='id identifier rubyid_reflection'>reflection</span><span class='period'>.</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:dependent</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='symbol'>:destroy</span>
   <span class='kw'>end</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span>
-    <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid__'>_</span><span class='op'>|</span>
-      <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-      <span class='comment'># Paranoid models will have this method, non-paranoid models will not
-</span>      <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_with_deleted'>with_deleted</span> <span class='kw'>if</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:with_deleted</span><span class='rparen'>)</span>
-      <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:really_destroy!</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_dependent_reflections'>dependent_reflections</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_association'>association</span><span class='op'>|</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_association'>association</span><span class='period'>.</span><span class='id identifier rubyid_collection?'>collection?</span>
+        <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+        <span class='comment'># Paranoid models will have this method, non-paranoid models will not
+</span>        <span class='id identifier rubyid_associated_records'>associated_records</span> <span class='op'>=</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_with_deleted'>with_deleted</span> <span class='kw'>if</span> <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:with_deleted</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_associated_records'>associated_records</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:really_destroy!</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+
+      <span class='kw'>end</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_destroy!'>destroy!</span>
@@ -557,7 +573,7 @@ not if it is “destroyed”.</p>
 </div>
 
       <div id="footer">
-  Generated on Thu Sep 21 14:59:06 2017 by
+  Generated on Thu Sep 21 15:36:04 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.9 (ruby-2.4.0).
 </div>
