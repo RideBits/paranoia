@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Paranoia">Paranoia</h1>
+
+<p>Paranoia is a re-implementation of <a
+href="http://github.com/technoweenie/acts_as_paranoid">acts_as_paranoid</a>
+for Rails 3, using much, much, much less code.</p>
+
+<p>You would use either plugin / gem if you wished that when you called
+<code>destroy</code> on an Active Record object that it didn&#39;t actually
+destroy it, but just “hid” the record. Paranoia does this by setting a
+<code>deleted_at</code> field to the current time when you
+<code>destroy</code> a record, and hides it by scoping all queries on your
+model to only include records which do not have a <code>deleted_at</code>
+field.</p>
+
+<p>If you wish to actually destroy an object you may call
+<code>really_destroy!</code>. <strong>WARNING</strong>: This will also
+<em>really destroy</em> all <code>dependent: destroy</code> records, so
+please aim this method away from face when using.**</p>
+
+<p>If a record has <code>has_many</code> associations defined AND those
+associations have <code>dependent: :destroy</code> set on them, then they
+will also be soft-deleted if <code>acts_as_paranoid</code> is set,
+otherwise the normal destroy will be called.</p>
+
+<h2 id="label-Installation+-26+Usage">Installation &amp; Usage</h2>
+
+<p>For Rails 3, please use version 1 of Paranoia:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>paranoia</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 1.0</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>For Rails 4, please use version 2 of Paranoia:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>paranoia</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 2.0</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>Of course you can install this from GitHub as well:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>paranoia</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='symbol'>:github</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>radar/paranoia</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='symbol'>:branch</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rails3</span><span class='tstring_end'>&#39;</span></span>
+<span class='comment'># or
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>paranoia</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='symbol'>:github</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>radar/paranoia</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='symbol'>:branch</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rails4</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>Then run:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_install'>install</span>
+</code></pre>
+
+<p>Updating is as simple as <code>bundle update paranoia</code>.</p>
+
+<h4 id="label-Run+your+migrations+for+the+desired+models">Run your migrations for the desired models</h4>
+
+<p>Run:</p>
+
+<pre class="code ruby"><code class="ruby">rails generate migration AddDeletedAtToClients deleted_at:datetime:index</code></pre>
+
+<p>and now you have a migration</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>AddDeletedAtToClients</span> <span class='op'>&lt;</span> <span class='const'><span class='object_link'><a href="ActiveRecord.html" title="ActiveRecord (module)">ActiveRecord</a></span></span><span class='op'>::</span><span class='const'>Migration</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_change'>change</span>
+    <span class='id identifier rubyid_add_column'>add_column</span> <span class='symbol'>:clients</span><span class='comma'>,</span> <span class='symbol'>:deleted_at</span><span class='comma'>,</span> <span class='symbol'>:datetime</span>
+    <span class='id identifier rubyid_add_index'>add_index</span> <span class='symbol'>:clients</span><span class='comma'>,</span> <span class='symbol'>:deleted_at</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h3 id="label-Usage">Usage</h3>
+
+<h4 id="label-In+your+model-3A">In your model:</h4>
+
+<pre class="code ruby"><code class="ruby">class Client &lt; ActiveRecord::Base
+  acts_as_paranoid
+
+  ...
+end
+</code></pre>
+
+<p>Hey presto, it&#39;s there! Calling <code>destroy</code> will now set the
+<code>deleted_at</code> column:</p>
+
+<pre class="code ruby"><code class="ruby">&gt;&gt; client.deleted_at =&gt; nil
+&gt;&gt; client.destroy =&gt; client
+&gt;&gt; client.deleted_at =&gt; [current timestamp]</code></pre>
+
+<p>If you really want it gone <em>gone</em>, call <code>destroy!</code></p>
+
+<pre class="code ruby"><code class="ruby">&gt;&gt; client.deleted_at =&gt; nil
+&gt;&gt; client.destroy! =&gt; client</code></pre>
+
+<p>If you want a method to be called on destroy, simply provide a
+<code>before_destroy</code> callback:</p>
+
+<pre class="code ruby"><code class="ruby">class Client &lt; ActiveRecord::Base
+  acts_as_paranoid
+
+  before_destroy :some_method
+
+  def some_method
+    # do stuff
+  end
+
+  ...
+end
+</code></pre>
+
+<p>If you want to use a column other than <code>deleted_at</code>, you can
+pass it as an option:</p>
+
+<pre class="code ruby"><code class="ruby">class Client &lt; ActiveRecord::Base
+  acts_as_paranoid column: :destroyed_at
+
+  ...
+end
+</code></pre>
+
+<p>If you want to access soft-deleted associations, override the getter
+method:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>def</span> <span class='id identifier rubyid_product'>product</span>
+  <span class='const'>Product</span><span class='period'>.</span><span class='id identifier rubyid_unscoped'>unscoped</span> <span class='lbrace'>{</span> <span class='kw'>super</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>If you want to find all records, even those which are deleted:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_with_deleted'>with_deleted</span>
+</code></pre>
+
+<p>If you want to find only the deleted records:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_only_deleted'>only_deleted</span>
+</code></pre>
+
+<p>If you want to check if a record is soft-deleted:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_client'>client</span><span class='period'>.</span><span class='id identifier rubyid_destroyed?'>destroyed?</span>
+</code></pre>
+
+<p>If you want to restore a record:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_restore'>restore</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>If you want to restore a whole bunch of records:</p>
+
+<pre class="code ruby"><code class="ruby">Client.restore([id1, id2, ..., idN])
+</code></pre>
+
+<p>If you want to restore a record and their dependently destroyed associated
+records:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Client</span><span class='period'>.</span><span class='id identifier rubyid_restore'>restore</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='symbol'>:recursive</span> <span class='op'>=&gt;</span> <span class='kw'>true</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>If you want callbacks to trigger before a restore:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_before_restore'>before_restore</span> <span class='symbol'>:callback_name_goes_here</span>
+</code></pre>
+
+<p>For more information, please look at the tests.</p>
+
+<h2 id="label-Acts+As+Paranoid+Migration">Acts As Paranoid Migration</h2>
+
+<p>You can replace the older acts_as_paranoid methods as follows:</p>
+
+<p>| Old Syntax | New Syntax | |:————————– |:—————————— |
+|<code>find_with_deleted(:all)</code> | <code>Client.with_deleted</code> |
+|<code>find_with_deleted(:first)</code> |
+<code>Client.with_deleted.first</code> |
+|<code>find_with_deleted(id)</code> |
+<code>Client.with_deleted.find(id)</code> |</p>
+
+<h2 id="label-License">License</h2>
+
+<p>This gem is released under the MIT license.</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Thu Sep 21 14:59:05 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.9 (ruby-2.4.0).
+</div>
+
+    </div>
+  </body>
+</html>
