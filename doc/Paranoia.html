@@ -582,12 +582,12 @@
       <pre class="lines">
 
 
-103
 104
-105</pre>
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 103</span>
+      <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 104</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroyed?'>destroyed?</span>
   <span class='op'>!</span><span class='op'>!</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_paranoia_column'>paranoia_column</span><span class='rparen'>)</span>
@@ -623,12 +623,14 @@
 97
 98
 99
-100</pre>
+100
+101</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/paranoia.rb', line 93</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_restore!'>restore!</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid___instance'>__instance</span> <span class='op'>=</span> <span class='kw'>self</span>
   <span class='const'><span class='object_link'><a href="ActiveRecord.html" title="ActiveRecord (module)">ActiveRecord</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="ActiveRecord/Base.html" title="ActiveRecord::Base (class)">Base</a></span></span><span class='period'>.</span><span class='id identifier rubyid_transaction'>transaction</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_run_callbacks'>run_callbacks</span><span class='lparen'>(</span><span class='symbol'>:restore</span><span class='rparen'>)</span> <span class='kw'>do</span>
       <span class='id identifier rubyid_update_column'>update_column</span> <span class='id identifier rubyid_paranoia_column'>paranoia_column</span><span class='comma'>,</span> <span class='kw'>nil</span>
@@ -646,7 +648,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Sep 21 15:36:04 2017 by
+  Generated on Fri Sep 22 17:43:33 2017 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.9 (ruby-2.4.0).
 </div>

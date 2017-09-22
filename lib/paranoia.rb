@@ -168,21 +168,12 @@ class ActiveRecord::Base
       dependent_reflections = self.reflections.select do |name, reflection|
         reflection.options[:dependent] == :destroy
       end
-      ___selfishness = self
       if dependent_reflections.any?
-        dependent_reflections.each do |name, association|
-          if association.collection?
-            associated_records = self.send(name)
-            # Paranoid models will have this method, non-paranoid models will not
-            associated_records = associated_records.with_deleted if associated_records.respond_to?(:with_deleted)
-            associated_records.each(&:really_destroy!)
-          else
-            next unless Paranoia.__is_associated?(association, ___selfishness)
-            entity = association.klass
-            find_expression = Paranoia.__derive_fitler_expression(association, ___selfishness)
-            item = entity.with_deleted.where(find_expression).first
-            item.really_destroy! unless item.nil?
-          end
+        dependent_reflections.each do |name, _|
+          associated_records = self.send(name)
+          # Paranoid models will have this method, non-paranoid models will not
+          associated_records = associated_records.with_deleted if associated_records.respond_to?(:with_deleted)
+          associated_records.each(&:really_destroy!)
         end
       end
       destroy!
